@@ -46,11 +46,11 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 .info-box b{display:flex;align-items:center;gap:6px;color:#172554;margin-bottom:6px;font-size:.85rem}
 .info-box .tag{width:12px;height:12px;border-radius:3px;display:inline-block}
 .calendar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.month{min-width:0;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.month-title{padding:9px;background:#f8fafc;font-weight:700;text-transform:capitalize}
+.month{min-width:0;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:visible}
+.month-title{padding:9px;background:#f8fafc;font-weight:700;text-transform:capitalize;border-radius:10px 10px 0 0}
 .weekdays,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));min-width:0}
 .weekdays div{text-align:center;color:var(--muted);font-size:.68rem;padding:4px}
-.day{min-width:0;min-height:52px;position:relative;border-top:1px solid #eef2f7;border-left:1px solid #eef2f7;overflow:hidden}
+.day{min-width:0;min-height:52px;position:relative;border-top:1px solid #eef2f7;border-left:1px solid #eef2f7;overflow:visible}
 .day.empty{background:#fafcff}
 .daynum{position:absolute;top:2px;left:2px;z-index:5;font-size:.64rem;font-weight:700;background:rgba(255,255,255,.8);border-radius:3px;padding:0 2px;line-height:1.3}
 .band{position:absolute;left:0;top:0;width:100%;height:34%}
@@ -60,16 +60,16 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 /* Festivo: colorea el cuadrado completo, sin reparto por supuesto */
 .day.holiday-full{background:#fecaca !important;box-shadow:inset 0 0 0 2px #dc2626}
 .holiday-label{position:absolute;bottom:3px;left:2px;right:2px;text-align:center;font-size:.66rem;font-weight:800;color:#991b1b;letter-spacing:.3px;z-index:4}
-.day[data-tip]:hover::after{content:attr(data-tip);position:absolute;z-index:20;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);width:max-content;max-width:230px;padding:7px 9px;border-radius:6px;background:#111827;color:#fff;font-size:.72rem;line-height:1.35;white-space:normal;box-shadow:0 4px 12px rgba(0,0,0,.4);pointer-events:none}
-.day[data-tip]:hover::before{content:"";position:absolute;z-index:21;left:50%;bottom:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111827;pointer-events:none}
+.day[data-tip]:hover::after{content:attr(data-tip);position:absolute;z-index:30;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);width:max-content;max-width:230px;padding:7px 9px;border-radius:6px;background:#111827;color:#fff;font-size:.72rem;line-height:1.35;white-space:normal;box-shadow:0 4px 12px rgba(0,0,0,.4);pointer-events:none}
+.day[data-tip]:hover::before{content:"";position:absolute;z-index:31;left:50%;bottom:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111827;pointer-events:none}
 /* --- Módulo de compensación por exceso de jornada (Art. 11.1) --- */
 .excess-module{margin-top:26px}
-.excess-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:10px}
+.excess-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:10px}
 .excess-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
 .excess-card h4{margin:0 0 8px;font-size:.92rem;display:flex;align-items:center;gap:6px}
 .excess-card .balance{font-size:1.5rem;font-weight:800;color:#0f766e}
 .excess-card .balance small{display:block;font-size:.7rem;font-weight:500;color:var(--muted)}
-.excess-card .equiv{font-size:.78rem;color:#334155;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:7px 9px;margin:8px 0}
+.excess-card .equiv{font-size:.78rem;color:#334155;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:7px 9px;margin:8px 0;line-height:1.5}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 .badge{font-size:.68rem;padding:3px 7px;border-radius:999px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;cursor:help}
 .excess-bar{height:8px;border-radius:5px;background:#e2e8f0;overflow:hidden;margin:6px 0 10px}
@@ -169,16 +169,18 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 <div class="card excess-module">
   <h2>Bolsa de compensación por exceso de jornada <small style="font-weight:400;color:var(--muted);font-size:.75rem">(Art. 11.1 del Acuerdo-Convenio)</small></h2>
   <p class="hint">
-    La jornada ordinaria (1.505 h/año, 35 h/semana) genera un excedente que el Convenio compensa con una bolsa
-    <strong>fija de 14 horas anuales</strong> por persona, acumulables para disfrutarse en jornadas completas.
-    Esta bolsa es <strong>independiente del número de días de la semana laboral</strong> (siempre son 14 horas,
-    tanto en el régimen normal como en las semanas de 4 días) y es <strong>distinta</strong> de la bolsa de
-    libre disposición del 5&nbsp;% destinada a conciliación.
+    En el Convenio (régimen L-V, 7 h/día) la bolsa se mantiene <strong>fija en 14 horas anuales</strong>, tal como
+    fija el Art. 11.1. En los supuestos de <strong>4 días (L-J y M-V)</strong> la bolsa se <strong>amplía
+    automáticamente</strong> según el exceso real de jornada de ese calendario concreto, calculado como:
+    <em>Horas objetivo (1.505 h) − (Horas brutas del calendario − horas de vacaciones − horas de asuntos propios)</em>,
+    de modo que al disfrutarla el cómputo anual de esos supuestos se acerque a las 1.505 horas del Convenio.
+    Esta bolsa sigue siendo distinta de la bolsa de libre disposición del 5&nbsp;% destinada a conciliación.
   </p>
   <div class="badges">
     <span class="badge" title="No es necesario acreditar ningún hecho causante (nacimiento, fallecimiento, etc.); es un derecho de descanso ya consolidado.">Sin hecho causante</span>
     <span class="badge" title="A diferencia de la bolsa de libre disposición del 5%, no exige recuperar el tiempo ni tiene un plazo máximo de 3 meses.">No recuperable / sin plazo</span>
     <span class="badge" title="Las horas se acumulan y se disfrutan en bloques de una o varias jornadas completas, según la duración diaria de cada supuesto.">Acumulable en jornadas completas</span>
+    <span class="badge" title="En L-J y M-V la bolsa no es fija: crece según el exceso real de horas de ese calendario, para acercar el total anual a las 1.505 horas.">Ampliada en 4 días</span>
   </div>
 
   <div class="excess-cards" id="excessCards"></div>
@@ -228,7 +230,7 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 const $ = id => document.getElementById(id);
 const TARGET = 1505;
 const CREDIT = 42;
-const EXCESS_BANK_HOURS = 14; // Art. 11.1: bolsa fija de 14 h/año, igual en los 3 supuestos
+const EXCESS_BANK_HOURS = 14; // Art. 11.1: bolsa fija de 14 h/año para el Convenio (L-V)
 const TRACKS = ['conv','lj','mv'];
 
 const TRACK_DEF = {
@@ -325,9 +327,37 @@ function recomputeCaches(){
 function absenceFor(ds, trackKey){ return state.absences.find(a=>a.date===ds && a.tracks.includes(trackKey)); }
 function permitUsed(trackKey){ return state.absences.filter(a=>a.type==='perm' && a.tracks.includes(trackKey)).reduce((x,a)=>x+(a.hours||0),0); }
 
-/* --- Lógica de la bolsa de compensación por exceso de jornada (Art. 11.1) --- */
-function excessEquivalentDays(dailyHours){
-  const value = EXCESS_BANK_HOURS / dailyHours;
+/* Horas consumidas por vacaciones: periodo principal (vacCache) + vacaciones puntuales sueltas */
+function vacationHoursTotal(trackKey){
+  let total = 0;
+  vacCache[trackKey].forEach(ds => { total += hours(trackKey, dateOf(ds)); });
+  state.absences
+    .filter(a => a.type==='vac' && a.tracks.includes(trackKey) && !vacCache[trackKey].includes(a.date))
+    .forEach(a => {
+      let d = dateOf(a.date);
+      if(scheduled(trackKey,d) && !holiday(d)) total += hours(trackKey,d);
+    });
+  return total;
+}
+
+/* Exceso real = Horas objetivo - (Horas brutas - horas vacaciones - horas asuntos propios) */
+function excesoRealHours(trackKey){
+  const bruto = grossHours(trackKey);
+  const vac = vacationHoursTotal(trackKey);
+  const asuntos = permitUsed(trackKey);
+  const netas = bruto - vac - asuntos;
+  return +(netas - TARGET).toFixed(2); // horas trabajadas por encima (o por debajo) del objetivo
+}
+
+/* Tamaño de la bolsa: fija (14 h) en Convenio; ampliada en los supuestos de 4 días según el exceso real */
+function bankSize(trackKey){
+  if(trackKey==='conv') return EXCESS_BANK_HOURS;
+  const excReal = excesoRealHours(trackKey);
+  return +Math.max(EXCESS_BANK_HOURS, excReal).toFixed(2);
+}
+
+function excessEquivalentDays(dailyHours, bankHours){
+  const value = bankHours / dailyHours;
   const intPart = Math.floor(value);
   const frac = value - intPart;
   // Misma regla de redondeo del Convenio: fracción > 0,5 jornada -> redondeo al alza
@@ -340,7 +370,7 @@ function excessUsedHours(trackKey){
   return state.excessBank[trackKey].uses.reduce((sum,u)=>sum+u.hours,0);
 }
 function excessBalance(trackKey){
-  return +(EXCESS_BANK_HOURS - excessUsedHours(trackKey)).toFixed(2);
+  return +Math.max(0, bankSize(trackKey) - excessUsedHours(trackKey)).toFixed(2);
 }
 function excessUseFor(ds, trackKey){
   return state.excessBank[trackKey].uses.find(u=>u.date===ds);
@@ -480,13 +510,14 @@ function lists(){
 function infoPanels(){
   $('infoPanels').innerHTML = TRACKS.map(t=>{
     let d = TRACK_DEF[t];
+    let bank = bankSize(t);
     return `<div class="info-box">
       <b><span class="tag" style="background:${d.colorWork}"></span>${d.label}</b>
       Jornada: ${d.dailyHours} h/día (35 h/sem, ${TARGET} h/año teóricas)<br>
       Horas brutas calendario ${year()}: ${grossHours(t).toFixed(2)} h<br>
       Vacaciones: ${vacationDaysTotal(t)} días hábiles (base ${d.vacBase}${state.antiguedad[t]>0?' + antigüedad':''})<br>
       Asuntos particulares: ${d.asuntosParticulares} días/año · Libre disposición (5%): ${d.libreDisp} h/año<br>
-      Bolsa exceso jornada (Art. 11.1): ${EXCESS_BANK_HOURS} h/año · saldo ${excessBalance(t)} h
+      Bolsa exceso jornada: ${bank.toFixed(2)} h/año (${t==='conv'?'fija Art. 11.1':'ampliada'}) · saldo ${excessBalance(t)} h
     </div>`;
   }).join('');
 }
@@ -494,20 +525,28 @@ function infoPanels(){
 function excessCards(){
   $('excessCards').innerHTML = TRACKS.map(t=>{
     const d = TRACK_DEF[t];
-    const eq = excessEquivalentDays(d.dailyHours);
+    const bruto = grossHours(t);
+    const vac = vacationHoursTotal(t);
+    const asuntos = permitUsed(t);
+    const netas = bruto - vac - asuntos;
+    const excReal = +(netas - TARGET).toFixed(2);
+    const bank = bankSize(t);
+    const eq = excessEquivalentDays(d.dailyHours, bank);
     const balance = excessBalance(t);
     const used = excessUsedHours(t);
-    const pct = Math.max(0, Math.min(100, (used/EXCESS_BANK_HOURS)*100));
+    const pct = bank>0 ? Math.max(0, Math.min(100, (used/bank)*100)) : 0;
     const remainderTxt = eq.remainderHours>0 ? ` + ${eq.remainderHours} h restantes` : '';
+    const bankNote = t==='conv' ? 'bolsa fija (Art. 11.1)' : 'bolsa ampliada según exceso real';
     return `<div class="excess-card">
       <h4><span class="tag" style="background:${d.colorWork}"></span>${d.label}</h4>
-      <div class="balance">${balance} h <small>saldo disponible de ${EXCESS_BANK_HOURS} h/año</small></div>
+      <div class="balance">${balance} h <small>saldo disponible de ${bank.toFixed(2)} h/año · ${bankNote}</small></div>
       <div class="excess-bar"><span style="width:${pct}%"></span></div>
       <div class="equiv">
-        14 h ÷ ${d.dailyHours} h/día = <strong>${eq.value.toFixed(2)} jornadas</strong><br>
-        Equivalencia redondeada: <strong>${eq.fullDays} jornada(s) completa(s)</strong>${remainderTxt}
+        Brutas ${bruto.toFixed(2)} h − vacaciones ${vac.toFixed(2)} h − asuntos propios ${asuntos.toFixed(2)} h = <strong>${netas.toFixed(2)} h netas</strong><br>
+        Objetivo ${TARGET} h → exceso real: <strong>${excReal.toFixed(2)} h</strong><br>
+        ${bank.toFixed(2)} h ÷ ${d.dailyHours} h/día = <strong>${eq.value.toFixed(2)} jornadas</strong> → <strong>${eq.fullDays} jornada(s) completa(s)</strong>${remainderTxt}
       </div>
-      <div class="hint">Usadas hasta ahora: ${used.toFixed(2)} h de ${EXCESS_BANK_HOURS} h.</div>
+      <div class="hint">Usadas hasta ahora: ${used.toFixed(2)} h de ${bank.toFixed(2)} h.</div>
     </div>`;
   }).join('');
 }
@@ -599,7 +638,7 @@ function calendar(){
 }
 
 function saveData(){
-  let data = {format:'organizacion-laboral', version:4, year:year(),
+  let data = {format:'organizacion-laboral', version:5, year:year(),
     holidays:state.holidays, absences:state.absences,
     vacStarts:state.vacStarts, antiguedad:state.antiguedad, show:state.show,
     excessBank:state.excessBank};
