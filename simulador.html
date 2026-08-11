@@ -3,76 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Simulador de organización laboral: Convenio vs. semana de 4 días</title>
+<title>Simulador comparativo: Convenio, 4 días L-J y 4 días M-V</title>
 <style>
 :root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#64748b;--line:#dbe3ef}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,sans-serif;color:var(--ink);background:var(--bg)}
 header{background:#172554;color:#fff;padding:24px}
-header h1{margin:0 0 5px}
-header p{margin:0;color:#dbeafe}
-main{max-width:1450px;margin:auto;padding:20px}
+header h1{margin:0 0 5px;font-size:1.4rem}
+header p{margin:0;color:#dbeafe;font-size:.92rem}
+main{max-width:1500px;margin:auto;padding:20px}
 .layout{display:grid;grid-template-columns:340px 1fr;gap:20px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
-.controls{position:sticky;top:10px}
+.controls{position:sticky;top:10px;max-height:96vh;overflow:auto}
 h2,h3{margin:0 0 12px}
-h3{margin-top:20px;font-size:1rem}
-label{display:block;margin:9px 0 4px;font-weight:650;font-size:.9rem}
-input,select,button{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:#fff}
+h3{margin-top:18px;font-size:.95rem;display:flex;align-items:center;gap:6px}
+h3 .tag{width:11px;height:11px;border-radius:3px;display:inline-block}
+label{display:block;margin:8px 0 4px;font-weight:650;font-size:.85rem}
+input,select,button{width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:#fff;font-size:.85rem}
 button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
-.hint{font-size:.82rem;color:var(--muted);line-height:1.4}
-.checks{display:flex;gap:15px}
-.checks label{display:flex;align-items:center;gap:5px}
+.hint{font-size:.78rem;color:var(--muted);line-height:1.4;margin:4px 0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.checks{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0}
+.checks label{display:flex;align-items:center;gap:5px;font-weight:500;font-size:.82rem;margin:0}
 .checks input{width:auto}
-.notice{padding:10px;background:#eff6ff;color:#1e40af;border-radius:8px;font-size:.85rem;margin:10px 0}
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:18px}
-.metric{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px}
-.metric strong{display:block;font-size:1.25rem}
-.metric span{font-size:.78rem;color:var(--muted)}
+.notice{padding:9px;background:#eff6ff;color:#1e40af;border-radius:8px;font-size:.8rem;margin:8px 0}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:16px}
+.metric{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px}
+.metric strong{display:block;font-size:1.15rem}
+.metric span{font-size:.75rem;color:var(--muted)}
 .warn{background:#fffbeb;border-color:#f59e0b}
-.entries{margin-top:8px;max-height:230px;overflow:auto;border-top:1px solid var(--line)}
-.entry{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #eef2f7;padding:6px 0;font-size:.8rem}
-.entry button{width:auto;padding:3px 7px;color:#b91c1c;background:#fff1f2}
-.data-buttons{display:grid;gap:7px}
+.entries{margin-top:6px;max-height:180px;overflow:auto;border-top:1px solid var(--line)}
+.entry{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #eef2f7;padding:5px 0;font-size:.76rem}
+.entry button{width:auto;padding:2px 6px;color:#b91c1c;background:#fff1f2}
+.data-buttons{display:grid;gap:6px}
 .data-buttons button{background:#f0fdf4;border-color:#86efac;color:#166534}
-.legend{display:flex;flex-wrap:wrap;gap:10px;color:#475569;font-size:.82rem;margin-bottom:12px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;color:#475569;font-size:.8rem;margin-bottom:12px}
 .legend span{display:flex;align-items:center;gap:4px}
-.dot{display:inline-block;width:12px;height:12px;border-radius:3px}
-.a{background:#bfdbfe}
-.b{background:#bbf7d0}
-.r{background:#cffafe;border:2px solid #0891b2}
-.h{background:#fee2e2;border:1px solid #dc2626}
-.v{background:#fef3c7;border:2px solid #f59e0b}
-.p{background:#f3e8ff;border:1px solid #9333ea}
-.info-box{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:.8rem;line-height:1.55}
-.info-box b{color:#172554;display:block;margin-bottom:4px}
+.dot{display:inline-block;width:13px;height:13px;border-radius:3px}
+.info-panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-bottom:16px}
+.info-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:.78rem;line-height:1.55}
+.info-box b{display:flex;align-items:center;gap:6px;color:#172554;margin-bottom:6px;font-size:.85rem}
+.info-box .tag{width:12px;height:12px;border-radius:3px;display:inline-block}
 .calendar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.month{min-width:0;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:visible}
-.month-title{padding:9px;background:#f8fafc;font-weight:700;text-transform:capitalize;border-radius:10px 10px 0 0}
+.month{min-width:0;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.month-title{padding:9px;background:#f8fafc;font-weight:700;text-transform:capitalize}
 .weekdays,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));min-width:0}
-.weekdays div{text-align:center;color:var(--muted);font-size:.7rem;padding:5px}
-.day{min-width:0;min-height:62px;padding:4px;border-top:1px solid #eef2f7;border-left:1px solid #eef2f7;font-size:.75rem;position:relative;overflow:visible}
-.day small{display:block;font-size:.64rem;line-height:1.15;overflow-wrap:anywhere}
-.day[data-tip]:hover::after{content:attr(data-tip);position:absolute;z-index:20;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);width:max-content;max-width:220px;padding:7px 9px;border-radius:6px;background:#111827;color:#fff;font-size:.72rem;line-height:1.25;white-space:normal;box-shadow:0 4px 12px 0 rgba(0,0,0,.4);pointer-events:none}
+.weekdays div{text-align:center;color:var(--muted);font-size:.68rem;padding:4px}
+.day{min-width:0;min-height:52px;position:relative;border-top:1px solid #eef2f7;border-left:1px solid #eef2f7;overflow:hidden}
+.day.empty{background:#fafcff}
+.daynum{position:absolute;top:2px;left:2px;z-index:5;font-size:.64rem;font-weight:700;background:rgba(255,255,255,.8);border-radius:3px;padding:0 2px;line-height:1.3}
+.band{position:absolute;left:0;top:0;width:100%;height:34%}
+.tri{position:absolute;left:0;top:34%;width:100%;height:66%}
+.tri.lj{clip-path:polygon(0 0,100% 0,0 100%)}
+.tri.mv{clip-path:polygon(100% 0,100% 100%,0 100%)}
+.day[data-tip]:hover::after{content:attr(data-tip);position:absolute;z-index:20;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);width:max-content;max-width:230px;padding:7px 9px;border-radius:6px;background:#111827;color:#fff;font-size:.72rem;line-height:1.35;white-space:normal;box-shadow:0 4px 12px rgba(0,0,0,.4);pointer-events:none}
 .day[data-tip]:hover::before{content:"";position:absolute;z-index:21;left:50%;bottom:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111827;pointer-events:none}
-.empty{background:#fafcff}
-.work-a{background:#eff6ff}
-.work-b{background:#f0fdf4}
-.work-both{background:linear-gradient(135deg,#eff6ff 50%,#f0fdf4 50%)}
-.reduced.work-a{background:#bae6fd;box-shadow:inset 0 0 0 2px #0284c7}
-.reduced.work-b{background:#bbf7d0;box-shadow:inset 0 0 0 2px #059669}
-.reduced.work-both{background:linear-gradient(135deg,#bae6fd 50%,#bbf7d0 50%);box-shadow:inset 0 0 0 2px #0891b2}
-.holiday{background:#fff1f2 !important;box-shadow:inset 0 0 0 2px #dc2626 !important}
-.period-vac{box-shadow:inset 0 0 0 3px #f59e0b !important}
-.perm{background:#faf5ff !important;box-shadow:inset 0 0 0 2px #9333ea !important}
 @media (max-width:1050px){.calendar{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.layout{grid-template-columns:1fr}.calendar{grid-template-columns:1fr}.controls{position:static}}
+@media (max-width:720px){.layout{grid-template-columns:1fr}.calendar{grid-template-columns:1fr}.controls{position:static;max-height:none}}
 </style>
 </head>
 <body>
 <header>
-<h1>Simulador de organización laboral: Convenio vs. semana de 4 días</h1>
-<p>Compara el Convenio actual (L-V, 7 h/día) con las dos variantes de semana de 4 días (L-J y M-V, 8 h 45 min/día) del Ayuntamiento de Madrid.</p>
+<h1>Simulador comparativo: Convenio vs. semana de 4 días (L-J y M-V)</h1>
+<p>Las tres opciones se muestran a la vez en cada día: Convenio ocupa el tercio superior; L-J y M-V se reparten en diagonal los dos tercios inferiores.</p>
 </header>
 <main>
 <div class="layout">
@@ -81,31 +74,36 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 <label>Año</label>
 <input id="year" type="number" value="2026" min="1900" max="2200">
 
-<h3>Grupo A</h3>
-<label>Supuesto</label>
-<select id="supA">
-<option value="convenio">Convenio (L-V, 7 h/día)</option>
-<option value="lj" selected>4 días (L-J, 8 h 45 min)</option>
-<option value="mv">4 días (M-V, 8 h 45 min)</option>
-</select>
-<label>Años de servicio (antigüedad)</label>
-<input id="antA" type="number" min="0" max="45" step="1" value="0">
-
-<h3>Grupo B</h3>
-<label>Supuesto</label>
-<select id="supB">
-<option value="convenio">Convenio (L-V, 7 h/día)</option>
-<option value="lj">4 días (L-J, 8 h 45 min)</option>
-<option value="mv" selected>4 días (M-V, 8 h 45 min)</option>
-</select>
-<label>Años de servicio (antigüedad)</label>
-<input id="antB" type="number" min="0" max="45" step="1" value="0">
-
-<label>Mostrar</label>
-<div class="checks">
-<label><input id="showA" type="checkbox" checked> Grupo A</label>
-<label><input id="showB" type="checkbox" checked> Grupo B</label>
+<h3><span class="tag" style="background:#bfdbfe"></span>Convenio (L-V, 7 h/día)</h3>
+<div class="row2">
+<div><label>Antigüedad (años)</label><input id="antConv" type="number" min="0" max="45" value="0"></div>
+<div><label>Mostrar</label><div class="checks"><label><input id="showConv" type="checkbox" checked> Sí</label></div></div>
 </div>
+<label>Comienzo vacaciones</label>
+<input id="vacStartConv" type="date">
+
+<h3><span class="tag" style="background:#bbf7d0"></span>4 días L-J (8 h 45 min/día)</h3>
+<div class="row2">
+<div><label>Antigüedad (años)</label><input id="antLj" type="number" min="0" max="45" value="0"></div>
+<div><label>Mostrar</label><div class="checks"><label><input id="showLj" type="checkbox" checked> Sí</label></div></div>
+</div>
+<label>Comienzo vacaciones</label>
+<input id="vacStartLj" type="date">
+<label>Comienzo exceso de jornada</label>
+<input id="excStartLj" type="date">
+
+<h3><span class="tag" style="background:#ddd6fe"></span>4 días M-V (8 h 45 min/día)</h3>
+<div class="row2">
+<div><label>Antigüedad (años)</label><input id="antMv" type="number" min="0" max="45" value="0"></div>
+<div><label>Mostrar</label><div class="checks"><label><input id="showMv" type="checkbox" checked> Sí</label></div></div>
+</div>
+<label>Comienzo vacaciones</label>
+<input id="vacStartMv" type="date">
+<label>Comienzo exceso de jornada</label>
+<input id="excStartMv" type="date">
+
+<button id="applyDates" style="margin-top:10px">Aplicar vacaciones y exceso</button>
+<div id="excesoInfo" class="entries"></div>
 
 <h3>Guardar y cargar datos</h3>
 <p class="hint">El archivo guardado contiene JSON y utiliza la extensión .data.</p>
@@ -114,19 +112,6 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 <input id="dataFile" type="file" accept=".data,.json,application/json">
 <button id="loadData">Cargar archivo .data</button>
 </div>
-
-<h3>Periodo de vacaciones</h3>
-<p class="hint">Días hábiles según el supuesto de cada grupo (18 en las variantes de 4 días, 22 en el Convenio, más los días de antigüedad). No cuentan festivos, fines de semana ni el día no laborable propio del grupo.</p>
-<label>Comienzo Grupo A</label>
-<input id="vacStartA" type="date">
-<label>Comienzo Grupo B</label>
-<input id="vacStartB" type="date">
-<button id="applyVac">Aplicar vacaciones</button>
-<div id="vacInfo" class="entries"></div>
-
-<h3>Permisos y asuntos particulares</h3>
-<p class="hint">Crédito máximo 42 horas anuales por grupo. Los permisos se introducen en horas.</p>
-<div class="notice">Objetivo anual: <strong>1.505 h</strong> por grupo (idéntico en los 3 supuestos).</div>
 
 <h3>Festivos</h3>
 <p class="hint">En 2026 se cargan los festivos de Madrid. El 15 de mayo (San Isidro) es automático y no editable.</p>
@@ -143,14 +128,14 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 <option value="perm">Permiso / asunto particular</option>
 <option value="vac">Vacaciones puntuales</option>
 </select>
-<label>Grupo</label>
-<select id="absenceGroup">
-<option value="A">A</option>
-<option value="B">B</option>
-<option value="both">Ambos</option>
-</select>
-<label>Horas</label>
-<input id="absenceHours" type="number" min="0.25" step="0.25" placeholder="Obligatorio para permisos">
+<label>Aplica a</label>
+<div class="checks">
+<label><input id="absConv" type="checkbox" checked> Convenio</label>
+<label><input id="absLj" type="checkbox"> L-J</label>
+<label><input id="absMv" type="checkbox"> M-V</label>
+</div>
+<label>Horas (obligatorio para permisos)</label>
+<input id="absenceHours" type="number" min="0.25" step="0.25">
 <button id="addAbsence">Añadir ausencia</button>
 <div id="absenceList" class="entries"></div>
 
@@ -162,7 +147,7 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 
 <section>
 <div id="sanNotice" class="notice"></div>
-<div id="infoPanels" class="summary"></div>
+<div id="infoPanels" class="info-panels"></div>
 <div id="summary" class="summary"></div>
 <div id="legend" class="legend"></div>
 <div id="calendar" class="calendar"></div>
@@ -174,18 +159,28 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 const $ = id => document.getElementById(id);
 const TARGET = 1505;
 const CREDIT = 42;
+const TRACKS = ['conv','lj','mv'];
 
-const SUPUESTOS = {
-  convenio: { label:'Convenio (L-V)', dailyHours:7, workDays:[1,2,3,4,5], vacBase:22, asuntosParticulares:6,
-    antiguedad:{15:1,20:2,25:3,30:4}, libreDisp:75.25 },
-  lj: { label:'4 días (L-J)', dailyHours:8.75, workDays:[1,2,3,4], vacBase:18, asuntosParticulares:5,
-    antiguedad:{15:1,20:2,25:2,30:3}, libreDisp:75.25 },
-  mv: { label:'4 días (M-V)', dailyHours:8.75, workDays:[2,3,4,5], vacBase:18, asuntosParticulares:5,
-    antiguedad:{15:1,20:2,25:2,30:3}, libreDisp:75.25 }
+const TRACK_DEF = {
+  conv:{ label:'Convenio (L-V)', dailyHours:7, workDays:[1,2,3,4,5], vacBase:22, asuntosParticulares:6,
+    antiguedad:{15:1,20:2,25:3,30:4}, libreDisp:75.25, colorWork:'#bfdbfe', colorReduced:'#7dd3fc' },
+  lj:{ label:'4 días (L-J)', dailyHours:8.75, workDays:[1,2,3,4], vacBase:18, asuntosParticulares:5,
+    antiguedad:{15:1,20:2,25:2,30:3}, libreDisp:75.25, colorWork:'#bbf7d0', colorReduced:'#6ee7b7' },
+  mv:{ label:'4 días (M-V)', dailyHours:8.75, workDays:[2,3,4,5], vacBase:18, asuntosParticulares:5,
+    antiguedad:{15:1,20:2,25:2,30:3}, libreDisp:75.25, colorWork:'#ddd6fe', colorReduced:'#c4b5fd' }
 };
+const STATUS_COLOR = { off:'#eef2f7', holiday:'#fecaca', vacation:'#fde68a', permiso:'#e9d5ff', exceso:'#99f6e4' };
 
-const state = { holidays:{}, absences:[], vacStarts:{A:null,B:null} };
-let vacDaysCache = {A:[],B:[]};
+const state = {
+  holidays:{}, absences:[],
+  vacStarts:{conv:null,lj:null,mv:null},
+  excStarts:{lj:null,mv:null},
+  antiguedad:{conv:0,lj:0,mv:0},
+  show:{conv:true,lj:true,mv:true}
+};
+let vacCache = {conv:[],lj:[],mv:[]};
+let excCache = {lj:[],mv:[]};
+let excCountCache = {lj:0,mv:0};
 
 const pad = n => String(n).padStart(2,'0');
 const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -206,8 +201,6 @@ const defaults2026 = {
 function year(){ return Number($('year').value) || 2026; }
 function san(){ return new Date(year(),4,15); }
 function holiday(d){ return !!state.holidays[iso(d)]; }
-function groupSup(g){ return g==='A' ? $('supA').value : $('supB').value; }
-function groupAnt(g){ return Number(g==='A' ? $('antA').value : $('antB').value) || 0; }
 
 function sanWeek(){
   let s = san();
@@ -222,38 +215,100 @@ function reduced(d){
   let d1=new Date(year(),5,15), d2=new Date(year(),8,15);
   return d>=d1 && d<=d2;
 }
-function scheduled(supKey, d){
-  let w = d.getDay();
+function scheduled(trackKey,d){
+  let w=d.getDay();
   if(w===0||w===6) return false;
-  return SUPUESTOS[supKey].workDays.includes(w);
+  return TRACK_DEF[trackKey].workDays.includes(w);
 }
-function hours(supKey, d){ return SUPUESTOS[supKey].dailyHours - (reduced(d) ? 1 : 0); }
-function absence(ds, g){ return state.absences.find(a => a.date===ds && (a.group===g || a.group==='both')); }
-function permitUsed(g){ return state.absences.filter(a=>a.type==='perm' && (a.group===g||a.group==='both')).reduce((x,a)=>x+(a.hours||0),0); }
+function hours(trackKey,d){ return TRACK_DEF[trackKey].dailyHours - (reduced(d)?1:0); }
 
-function vacationDaysTotal(supKey, ant){
-  let extra = 0;
-  const table = SUPUESTOS[supKey].antiguedad;
-  Object.keys(table).map(Number).sort((a,b)=>a-b).forEach(k=>{ if(ant>=k) extra = table[k]; });
-  return SUPUESTOS[supKey].vacBase + extra;
+function vacationDaysTotal(trackKey){
+  let ant = state.antiguedad[trackKey]||0, extra=0;
+  const table = TRACK_DEF[trackKey].antiguedad;
+  Object.keys(table).map(Number).sort((a,b)=>a-b).forEach(k=>{ if(ant>=k) extra=table[k]; });
+  return TRACK_DEF[trackKey].vacBase + extra;
 }
-function vacDays(start, supKey, ant){
+function vacDays(start, trackKey){
   if(!start || start.slice(0,4)!==String(year())) return [];
-  let total = vacationDaysTotal(supKey, ant);
-  let d = dateOf(start), out=[], guard=0;
+  let total = vacationDaysTotal(trackKey);
+  let d=dateOf(start), out=[], guard=0;
   while(out.length<total && guard<400){
     guard++;
-    if(scheduled(supKey,d) && !holiday(d)) out.push(iso(d));
+    if(scheduled(trackKey,d) && !holiday(d)) out.push(iso(d));
     d.setDate(d.getDate()+1);
   }
   return out;
 }
-function recomputeVacCache(){
-  vacDaysCache.A = vacDays(state.vacStarts.A, groupSup('A'), groupAnt('A'));
-  vacDaysCache.B = vacDays(state.vacStarts.B, groupSup('B'), groupAnt('B'));
+function roundExcessToDays(hoursExcess, dailyHours){
+  if(hoursExcess<=0) return 0;
+  let d = Math.floor(hoursExcess/dailyHours);
+  let rem = hoursExcess - d*dailyHours;
+  if(rem > dailyHours/2) d += 1;
+  return d;
+}
+function grossHours(trackKey){
+  let total=0;
+  for(let m=0;m<12;m++){
+    let last=new Date(year(),m+1,0).getDate();
+    for(let n=1;n<=last;n++){
+      let d=new Date(year(),m,n);
+      if(scheduled(trackKey,d) && !holiday(d)) total += hours(trackKey,d);
+    }
+  }
+  return total;
+}
+function excesoDaysCount(trackKey){
+  if(trackKey==='conv') return 0;
+  let diff = grossHours(trackKey) - grossHours('conv');
+  return roundExcessToDays(diff, TRACK_DEF[trackKey].dailyHours);
+}
+function excesoDays(start, trackKey, count){
+  if(!start || start.slice(0,4)!==String(year()) || count<=0) return [];
+  let d=dateOf(start), out=[], guard=0;
+  while(out.length<count && guard<400){
+    guard++;
+    let ds=iso(d);
+    if(scheduled(trackKey,d) && !holiday(d) && !vacCache[trackKey].includes(ds)) out.push(ds);
+    d.setDate(d.getDate()+1);
+  }
+  return out;
+}
+function recomputeCaches(){
+  TRACKS.forEach(t=> vacCache[t] = vacDays(state.vacStarts[t], t));
+  ['lj','mv'].forEach(t=>{
+    excCountCache[t] = excesoDaysCount(t);
+    excCache[t] = excesoDays(state.excStarts[t], t, excCountCache[t]);
+  });
+}
+function absenceFor(ds, trackKey){ return state.absences.find(a=>a.date===ds && a.tracks.includes(trackKey)); }
+function permitUsed(trackKey){ return state.absences.filter(a=>a.type==='perm' && a.tracks.includes(trackKey)).reduce((x,a)=>x+(a.hours||0),0); }
+
+function statusFor(trackKey,d,ds){
+  if(!scheduled(trackKey,d)) return 'off';
+  if(holiday(d)) return 'holiday';
+  if(vacCache[trackKey].includes(ds)) return 'vacation';
+  let ab = absenceFor(ds,trackKey);
+  if(ab){ return ab.type==='vac' ? 'vacation' : 'permiso'; }
+  if(trackKey!=='conv' && excCache[trackKey].includes(ds)) return 'exceso';
+  return reduced(d) ? 'work-reduced' : 'work';
+}
+function colorFor(trackKey,st){
+  if(!state.show[trackKey]) return '#ffffff';
+  if(st==='work') return TRACK_DEF[trackKey].colorWork;
+  if(st==='work-reduced') return TRACK_DEF[trackKey].colorReduced;
+  return STATUS_COLOR[st];
+}
+function labelFor(trackKey,st,d,ds){
+  let name = TRACK_DEF[trackKey].label;
+  if(st==='off') return null;
+  if(st==='holiday') return `${name}: Festivo (${state.holidays[ds]||'Festivo'})`;
+  if(st==='vacation') return `${name}: Vacaciones`;
+  if(st==='permiso'){ let a=absenceFor(ds,trackKey); return `${name}: Permiso (${a?a.hours:'?'} h)`; }
+  if(st==='exceso') return `${name}: Día de exceso de jornada`;
+  if(st==='work-reduced') return `${name}: Jornada reducida (${hours(trackKey,d)} h)`;
+  return `${name}: Jornada (${hours(trackKey,d)} h)`;
 }
 
-function short(t){ return t.trim().slice(0,3).toUpperCase(); }
 function esc(t){ return t.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
 
 function notice(){
@@ -266,16 +321,20 @@ function init(){
   state.holidays = year()===2026 ? {...defaults2026} : {};
   state.holidays[year()+'-05-15'] = 'San Isidro';
   state.absences = [];
-  state.vacStarts = {A:null,B:null};
-  $('vacStartA').value=''; $('vacStartB').value='';
+  state.vacStarts = {conv:null,lj:null,mv:null};
+  state.excStarts = {lj:null,mv:null};
+  ['vacStartConv','vacStartLj','vacStartMv','excStartLj','excStartMv'].forEach(id=>$(id).value='');
   notice();
   render();
 }
 
-function applyVac(){
-  let a=$('vacStartA').value, b=$('vacStartB').value;
-  if([a,b].some(x=>x && x.slice(0,4)!==String(year()))) return alert('Las fechas deben pertenecer al año seleccionado.');
-  state.vacStarts.A=a||null; state.vacStarts.B=b||null;
+function applyDates(){
+  let vc=$('vacStartConv').value, vl=$('vacStartLj').value, vm=$('vacStartMv').value;
+  let el=$('excStartLj').value, em=$('excStartMv').value;
+  let all=[vc,vl,vm,el,em].filter(Boolean);
+  if(all.some(x=>x.slice(0,4)!==String(year()))) return alert('Las fechas deben pertenecer al año seleccionado.');
+  state.vacStarts.conv=vc||null; state.vacStarts.lj=vl||null; state.vacStarts.mv=vm||null;
+  state.excStarts.lj=el||null; state.excStarts.mv=em||null;
   render();
 }
 
@@ -289,92 +348,96 @@ function addHoliday(){
 }
 
 function addAbsence(){
-  let d=$('absenceDate').value, t=$('absenceType').value, g=$('absenceGroup').value, h=Number($('absenceHours').value);
+  let d=$('absenceDate').value, t=$('absenceType').value, h=Number($('absenceHours').value);
+  let tracks = ['conv','lj','mv'].filter(t2=>$('abs'+t2.charAt(0).toUpperCase()+t2.slice(1)).checked);
   if(!d || d.slice(0,4)!==String(year())) return alert('Selecciona una fecha del año actual.');
+  if(!tracks.length) return alert('Selecciona al menos un supuesto (Convenio, L-J o M-V).');
   if(t==='perm' && !(h>0)) return alert('El permiso debe indicarse en horas.');
   if(t==='perm'){
-    for(const x of (g==='both'?['A','B']:[g])){
-      if(permitUsed(x)+h > CREDIT) return alert('Se superarían las 42 horas anuales en el grupo '+x+'.');
+    for(const tk of tracks){
+      if(permitUsed(tk)+h > CREDIT) return alert('Se superarían las 42 horas anuales en '+TRACK_DEF[tk].label+'.');
     }
   }
-  state.absences.push({date:d, type:t, group:g, hours: t==='perm'? h : null});
+  state.absences.push({date:d, type:t, tracks, hours: t==='perm'? h : null});
   $('absenceDate').value=''; $('absenceHours').value='';
   render();
 }
 
 function lists(){
-  $('vacInfo').innerHTML = ['A','B'].map(g=>{
-    let s = state.vacStarts[g];
-    let total = vacationDaysTotal(groupSup(g), groupAnt(g));
-    return `<div class="entry">Grupo ${g} (${SUPUESTOS[groupSup(g)].label}): ${s? fmt(s)+' · '+total+' jornadas' : 'sin configurar · '+total+' jornadas'}</div>`;
-  }).join('');
   $('holidayList').innerHTML = Object.entries(state.holidays).sort().map(([d,n])=>
     `<div class="entry">${fmt(d)} — ${esc(n)} ${d!==year()+'-05-15' ? `<button data-h="${d}">Quitar</button>`:''}</div>`
   ).join('');
   $('absenceList').innerHTML = state.absences.map((a,i)=>
-    `<div class="entry">${fmt(a.date)} — ${a.type==='perm'?'Permiso':'Vacaciones'} (${a.group}${a.type==='perm'?', '+a.hours+' h':''}) <button data-a="${i}">Quitar</button></div>`
+    `<div class="entry">${fmt(a.date)} — ${a.type==='perm'?'Permiso':'Vacaciones'} (${a.tracks.join('+')}${a.type==='perm'?', '+a.hours+' h':''}) <button data-a="${i}">Quitar</button></div>`
   ).join('');
+  $('excesoInfo').innerHTML = ['lj','mv'].map(t=>{
+    let applied = excCache[t].length, total = excCountCache[t];
+    return `<div class="entry">${TRACK_DEF[t].label}: ${total} día(s) de exceso calculados · ${applied} aplicado(s)${state.excStarts[t]?' desde '+fmt(state.excStarts[t]):''}</div>`;
+  }).join('');
   document.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ delete state.holidays[b.dataset.h]; render(); });
   document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ state.absences.splice(b.dataset.a,1); render(); });
 }
 
 function infoPanels(){
-  $('infoPanels').innerHTML = ['A','B'].map(g=>{
-    let sk = groupSup(g), s = SUPUESTOS[sk], ant = groupAnt(g);
-    return `<div class="metric info-box">
-      <b>Grupo ${g} — ${s.label}</b>
-      Jornada: ${s.dailyHours===7?'7 h/día':'8 h 45 min/día'} (35 h/sem)<br>
-      Vacaciones: ${vacationDaysTotal(sk,ant)} días hábiles (base ${s.vacBase}${ant>0?' + antigüedad':''})<br>
-      Asuntos particulares: ${s.asuntosParticulares} días/año<br>
-      Bolsa libre disposición: ${s.libreDisp} h/año
+  $('infoPanels').innerHTML = TRACKS.map(t=>{
+    let d = TRACK_DEF[t];
+    let excLine = t==='conv' ? '' : `Exceso de jornada: <b style="font-weight:700">${excCountCache[t]} día(s)</b> calculados para aproximar horas al Convenio (aplicados: ${excCache[t].length})<br>`;
+    return `<div class="info-box">
+      <b><span class="tag" style="background:${d.colorWork}"></span>${d.label}</b>
+      Jornada: ${d.dailyHours} h/día (35 h/sem, ${TARGET} h/año teóricas)<br>
+      Horas brutas calendario ${year()}: ${grossHours(t).toFixed(2)} h<br>
+      Vacaciones: ${vacationDaysTotal(t)} días hábiles (base ${d.vacBase}${state.antiguedad[t]>0?' + antigüedad':''})<br>
+      Asuntos particulares: ${d.asuntosParticulares} días/año · Libre disposición: ${d.libreDisp} h/año<br>
+      ${excLine}
     </div>`;
   }).join('');
 }
 
 function summary(){
-  recomputeVacCache();
-  let res = {A:{h:0,v:0,p:0}, B:{h:0,v:0,p:0}};
+  recomputeCaches();
+  let res = {conv:{h:0,v:0,p:0,e:0}, lj:{h:0,v:0,p:0,e:0}, mv:{h:0,v:0,p:0,e:0}};
   for(let m=0;m<12;m++){
     let last = new Date(year(),m+1,0).getDate();
     for(let n=1;n<=last;n++){
       let d = new Date(year(),m,n), ds = iso(d);
-      for(const g of ['A','B']){
-        let sk = groupSup(g);
-        if(!scheduled(sk,d) || holiday(d)) continue;
-        let h = hours(sk,d);
-        let isVac = vacDaysCache[g].includes(ds);
-        let a = absence(ds,g);
-        if(isVac){ res[g].v += h; continue; }
-        if(a && a.type==='vac'){ res[g].v += h; continue; }
-        if(a && a.type==='perm'){ res[g].p += a.hours; res[g].h += Math.max(0, h-a.hours); continue; }
-        res[g].h += h;
-      }
+      TRACKS.forEach(t=>{
+        let st = statusFor(t,d,ds);
+        if(st==='work') res[t].h += hours(t,d);
+        else if(st==='work-reduced') res[t].h += hours(t,d);
+        else if(st==='permiso'){ let a=absenceFor(ds,t); res[t].p += a.hours; res[t].h += Math.max(0, hours(t,d)-a.hours); }
+        else if(st==='vacation') res[t].v += hours(t,d);
+        else if(st==='exceso') res[t].e += hours(t,d);
+      });
     }
   }
-  let da=(res.A.h-TARGET).toFixed(2), db=(res.B.h-TARGET).toFixed(2);
+  let diffLj = (res.lj.h - res.conv.h).toFixed(2);
+  let diffMv = (res.mv.h - res.conv.h).toFixed(2);
   $('summary').innerHTML = `
-    <div class="metric"><strong>${res.A.h.toFixed(2)} h</strong><span>Horas trabajadas A</span></div>
-    <div class="metric"><strong>${res.B.h.toFixed(2)} h</strong><span>Horas trabajadas B</span></div>
-    <div class="metric"><strong>${TARGET} h</strong><span>Objetivo anual</span></div>
-    <div class="metric warn"><strong>${da} / ${db} h</strong><span>Diferencia A / B vs. objetivo</span></div>
-    <div class="metric"><strong>${res.A.p.toFixed(2)} / ${res.B.p.toFixed(2)} h</strong><span>Permisos A/B (máx. ${CREDIT})</span></div>
-    <div class="metric"><strong>${res.A.v.toFixed(2)} / ${res.B.v.toFixed(2)} h</strong><span>Vacaciones A/B</span></div>
+    <div class="metric"><strong>${res.conv.h.toFixed(2)} h</strong><span>Horas trabajadas Convenio</span></div>
+    <div class="metric"><strong>${res.lj.h.toFixed(2)} h</strong><span>Horas trabajadas L-J</span></div>
+    <div class="metric"><strong>${res.mv.h.toFixed(2)} h</strong><span>Horas trabajadas M-V</span></div>
+    <div class="metric warn"><strong>${diffLj} / ${diffMv} h</strong><span>Diferencia L-J / M-V vs. Convenio (tras exceso)</span></div>
+    <div class="metric"><strong>${res.conv.p.toFixed(2)} / ${res.lj.p.toFixed(2)} / ${res.mv.p.toFixed(2)} h</strong><span>Permisos (máx. ${CREDIT} c/u)</span></div>
+    <div class="metric"><strong>${res.conv.v.toFixed(2)} / ${res.lj.v.toFixed(2)} / ${res.mv.v.toFixed(2)} h</strong><span>Vacaciones (Conv/L-J/M-V)</span></div>
+    <div class="metric"><strong>${res.lj.e.toFixed(2)} / ${res.mv.e.toFixed(2)} h</strong><span>Horas de exceso aplicadas (L-J/M-V)</span></div>
   `;
 }
 
 function legend(){
   $('legend').innerHTML = `
-    <span><i class="dot a"></i> Grupo A — ${SUPUESTOS[groupSup('A')].label}</span>
-    <span><i class="dot b"></i> Grupo B — ${SUPUESTOS[groupSup('B')].label}</span>
-    <span><i class="dot r"></i> Jornada reducida (San Isidro / verano, −1 h)</span>
-    <span><i class="dot v"></i> Vacaciones</span>
-    <span><i class="dot h"></i> Festivo</span>
-    <span><i class="dot p"></i> Permiso</span>
+    <span><i class="dot" style="background:#bfdbfe"></i> Convenio (tercio superior)</span>
+    <span><i class="dot" style="background:#bbf7d0"></i> L-J (diagonal)</span>
+    <span><i class="dot" style="background:#ddd6fe"></i> M-V (diagonal)</span>
+    <span><i class="dot" style="background:#7dd3fc"></i> Jornada reducida (tono más intenso: San Isidro / verano)</span>
+    <span><i class="dot" style="background:#fecaca"></i> Festivo</span>
+    <span><i class="dot" style="background:#fde68a"></i> Vacaciones</span>
+    <span><i class="dot" style="background:#e9d5ff"></i> Permiso</span>
+    <span><i class="dot" style="background:#99f6e4"></i> Exceso de jornada</span>
   `;
 }
 
 function calendar(){
-  let y=year(), sa=$('showA').checked, sb=$('showB').checked;
+  let y=year();
   $('calendar').innerHTML='';
   for(let m=0;m<12;m++){
     let box=document.createElement('div');
@@ -385,34 +448,29 @@ function calendar(){
     for(let i=0;i<first;i++) days.insertAdjacentHTML('beforeend','<div class="day empty"></div>');
     for(let n=1;n<=new Date(y,m+1,0).getDate();n++){
       let d=new Date(y,m,n), ds=iso(d);
-      let skA=groupSup('A'), skB=groupSup('B');
-      let a=sa&&scheduled(skA,d), b=sb&&scheduled(skB,d);
-      let h=state.holidays[ds];
-      let va=sa&&vacDaysCache.A.includes(ds), vb=sb&&vacDaysCache.B.includes(ds);
-      let ab=sa?absence(ds,'A'):null, bb=sb?absence(ds,'B'):null;
-      let cls = a&&b ? 'work-both' : a ? 'work-a' : b ? 'work-b' : '';
-      if((a||b) && !h && reduced(d)) cls += ' reduced';
-      if(h) cls += ' holiday';
-      if(va||vb) cls += ' period-vac';
-      if((ab&&ab.type==='perm')||(bb&&bb.type==='perm')) cls += ' perm';
-      let full=[];
-      if(h) full.push(h);
-      if(va||vb) full.push('Vacaciones '+(va&&vb?'A y B':va?'A':'B'));
-      if(ab) full.push(ab.type==='perm'?'Permiso A ('+ab.hours+' h)':'Vacaciones puntuales A');
-      if(bb) full.push(bb.type==='perm'?'Permiso B ('+bb.hours+' h)':'Vacaciones puntuales B');
-      let tip = full.join(' · ');
-      let shown = full.map(short).join(' ');
-      days.insertAdjacentHTML('beforeend', `<div class="day ${cls}"${tip?` data-tip="${esc(tip)}"`:''}>${n}${shown?`<small>${shown}</small>`:''}</div>`);
+      let tips=[];
+      let stConv = statusFor('conv',d,ds), stLj = statusFor('lj',d,ds), stMv = statusFor('mv',d,ds);
+      [['conv',stConv],['lj',stLj],['mv',stMv]].forEach(([t,st])=>{
+        if(state.show[t]){ let l=labelFor(t,st,d,ds); if(l) tips.push(l); }
+      });
+      let tip = tips.join(' • ');
+      let cConv=colorFor('conv',stConv), cLj=colorFor('lj',stLj), cMv=colorFor('mv',stMv);
+      days.insertAdjacentHTML('beforeend',
+        `<div class="day"${tip?` data-tip="${esc(tip)}"`:''}>
+           <span class="daynum">${n}</span>
+           <div class="band" style="background:${cConv}"></div>
+           <div class="tri lj" style="background:${cLj}"></div>
+           <div class="tri mv" style="background:${cMv}"></div>
+         </div>`);
     }
     $('calendar').appendChild(box);
   }
 }
 
 function saveData(){
-  let data = {format:'organizacion-laboral', version:2, year:year(),
-    holidays:state.holidays, vacationStarts:state.vacStarts, absences:state.absences,
-    supA:$('supA').value, supB:$('supB').value, antA:$('antA').value, antB:$('antB').value,
-    display:{groupA:$('showA').checked, groupB:$('showB').checked}};
+  let data = {format:'organizacion-laboral', version:3, year:year(),
+    holidays:state.holidays, absences:state.absences,
+    vacStarts:state.vacStarts, excStarts:state.excStarts, antiguedad:state.antiguedad, show:state.show};
   let blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   let url = URL.createObjectURL(blob);
   let a = document.createElement('a');
@@ -431,16 +489,15 @@ function loadData(){
       if(!d || !d.holidays || !Array.isArray(d.absences)) throw 0;
       $('year').value = d.year || year();
       state.holidays = d.holidays; state.holidays[year()+'-05-15']='San Isidro';
-      state.absences = d.absences;
-      state.vacStarts.A = d.vacationStarts?.A || null;
-      state.vacStarts.B = d.vacationStarts?.B || null;
-      $('vacStartA').value = state.vacStarts.A||'';
-      $('vacStartB').value = state.vacStarts.B||'';
-      if(d.supA) $('supA').value=d.supA;
-      if(d.supB) $('supB').value=d.supB;
-      if(d.antA!=null) $('antA').value=d.antA;
-      if(d.antB!=null) $('antB').value=d.antB;
-      if(d.display){ $('showA').checked = d.display.groupA!==false; $('showB').checked = d.display.groupB!==false; }
+      state.absences = d.absences.map(a=> a.tracks ? a : {...a, tracks:[a.group==='both'?'conv':'conv']} );
+      state.vacStarts = d.vacStarts || {conv:null,lj:null,mv:null};
+      state.excStarts = d.excStarts || {lj:null,mv:null};
+      state.antiguedad = d.antiguedad || {conv:0,lj:0,mv:0};
+      state.show = d.show || {conv:true,lj:true,mv:true};
+      $('vacStartConv').value=state.vacStarts.conv||''; $('vacStartLj').value=state.vacStarts.lj||''; $('vacStartMv').value=state.vacStarts.mv||'';
+      $('excStartLj').value=state.excStarts.lj||''; $('excStartMv').value=state.excStarts.mv||'';
+      $('antConv').value=state.antiguedad.conv||0; $('antLj').value=state.antiguedad.lj||0; $('antMv').value=state.antiguedad.mv||0;
+      $('showConv').checked=state.show.conv!==false; $('showLj').checked=state.show.lj!==false; $('showMv').checked=state.show.mv!==false;
       notice(); render();
     }catch(e){ alert('El archivo no contiene JSON válido para este simulador.'); }
     $('dataFile').value='';
@@ -448,22 +505,24 @@ function loadData(){
   r.readAsText(f);
 }
 
-function render(){ lists(); infoPanels(); summary(); legend(); calendar(); }
+function render(){
+  state.antiguedad.conv=Number($('antConv').value)||0;
+  state.antiguedad.lj=Number($('antLj').value)||0;
+  state.antiguedad.mv=Number($('antMv').value)||0;
+  state.show.conv=$('showConv').checked; state.show.lj=$('showLj').checked; state.show.mv=$('showMv').checked;
+  recomputeCaches();
+  lists(); infoPanels(); summary(); legend(); calendar();
+}
 
 $('year').onchange = init;
-$('supA').onchange = render;
-$('supB').onchange = render;
-$('antA').onchange = render;
-$('antB').onchange = render;
-$('showA').onchange = render;
-$('showB').onchange = render;
-$('applyVac').onclick = applyVac;
+['antConv','antLj','antMv','showConv','showLj','showMv'].forEach(id=> $(id).onchange = render);
+$('applyDates').onclick = applyDates;
 $('addHoliday').onclick = addHoliday;
 $('addAbsence').onclick = addAbsence;
 $('saveData').onclick = saveData;
 $('loadData').onclick = loadData;
 $('print').onclick = () => print();
-$('clearAll').onclick = () => { if(confirm('¿Eliminar festivos añadidos, vacaciones y permisos?')) init(); };
+$('clearAll').onclick = () => { if(confirm('¿Eliminar festivos añadidos, vacaciones, exceso y permisos?')) init(); };
 
 init();
 </script>
