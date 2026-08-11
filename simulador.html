@@ -23,6 +23,7 @@ input,select,button{width:100%;padding:8px;border:1px solid #cbd5e1;border-radiu
 button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 .hint{font-size:.78rem;color:var(--muted);line-height:1.4;margin:4px 0}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .checks{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0}
 .checks label{display:flex;align-items:center;gap:5px;font-weight:500;font-size:.82rem;margin:0}
 .checks input{width:auto}
@@ -58,6 +59,20 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 .tri.mv{clip-path:polygon(100% 0,100% 100%,0 100%)}
 .day[data-tip]:hover::after{content:attr(data-tip);position:absolute;z-index:20;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);width:max-content;max-width:230px;padding:7px 9px;border-radius:6px;background:#111827;color:#fff;font-size:.72rem;line-height:1.35;white-space:normal;box-shadow:0 4px 12px rgba(0,0,0,.4);pointer-events:none}
 .day[data-tip]:hover::before{content:"";position:absolute;z-index:21;left:50%;bottom:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111827;pointer-events:none}
+/* --- Módulo de compensación por exceso de jornada (Art. 11.1) --- */
+.excess-module{margin-top:26px}
+.excess-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:10px}
+.excess-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.excess-card h4{margin:0 0 8px;font-size:.92rem;display:flex;align-items:center;gap:6px}
+.excess-card .balance{font-size:1.5rem;font-weight:800;color:#0f766e}
+.excess-card .balance small{display:block;font-size:.7rem;font-weight:500;color:var(--muted)}
+.excess-card .equiv{font-size:.78rem;color:#334155;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:7px 9px;margin:8px 0}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.badge{font-size:.68rem;padding:3px 7px;border-radius:999px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;cursor:help}
+.excess-bar{height:8px;border-radius:5px;background:#e2e8f0;overflow:hidden;margin:6px 0 10px}
+.excess-bar span{display:block;height:100%;background:#0d9488}
+.excess-form{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px}
+.excess-form .row3{align-items:end}
 @media (max-width:1050px){.calendar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:720px){.layout{grid-template-columns:1fr}.calendar{grid-template-columns:1fr}.controls{position:static;max-height:none}}
 </style>
@@ -89,8 +104,6 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 </div>
 <label>Comienzo vacaciones</label>
 <input id="vacStartLj" type="date">
-<label>Comienzo exceso de jornada</label>
-<input id="excStartLj" type="date">
 
 <h3><span class="tag" style="background:#ddd6fe"></span>4 días M-V (8 h 45 min/día)</h3>
 <div class="row2">
@@ -99,11 +112,8 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 </div>
 <label>Comienzo vacaciones</label>
 <input id="vacStartMv" type="date">
-<label>Comienzo exceso de jornada</label>
-<input id="excStartMv" type="date">
 
-<button id="applyDates" style="margin-top:10px">Aplicar vacaciones y exceso</button>
-<div id="excesoInfo" class="entries"></div>
+<button id="applyDates" style="margin-top:10px">Aplicar vacaciones</button>
 
 <h3>Guardar y cargar datos</h3>
 <p class="hint">El archivo guardado contiene JSON y utiliza la extensión .data.</p>
@@ -151,6 +161,62 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 <div id="summary" class="summary"></div>
 <div id="legend" class="legend"></div>
 <div id="calendar" class="calendar"></div>
+
+<!-- ============ MÓDULO: Compensación por exceso de jornada (Art. 11.1) ============ -->
+<div class="card excess-module">
+  <h2>Bolsa de compensación por exceso de jornada <small style="font-weight:400;color:var(--muted);font-size:.75rem">(Art. 11.1 del Acuerdo-Convenio)</small></h2>
+  <p class="hint">
+    La jornada ordinaria (1.505 h/año, 35 h/semana) genera un excedente que el Convenio compensa con una bolsa
+    <strong>fija de 14 horas anuales</strong> por persona, acumulables para disfrutarse en jornadas completas.
+    Esta bolsa es <strong>independiente del número de días de la semana laboral</strong> (siempre son 14 horas,
+    tanto en el régimen normal como en las semanas de 4 días) y es <strong>distinta</strong> de la bolsa de
+    libre disposición del 5&nbsp;% destinada a conciliación.
+  </p>
+  <div class="badges">
+    <span class="badge" title="No es necesario acreditar ningún hecho causante (nacimiento, fallecimiento, etc.); es un derecho de descanso ya consolidado.">Sin hecho causante</span>
+    <span class="badge" title="A diferencia de la bolsa de libre disposición del 5%, no exige recuperar el tiempo ni tiene un plazo máximo de 3 meses.">No recuperable / sin plazo</span>
+    <span class="badge" title="Las horas se acumulan y se disfrutan en bloques de una o varias jornadas completas, según la duración diaria de cada supuesto.">Acumulable en jornadas completas</span>
+  </div>
+
+  <div class="excess-cards" id="excessCards"></div>
+
+  <div class="excess-form">
+    <h3 style="margin-top:0">Registrar disfrute</h3>
+    <div class="row3">
+      <div>
+        <label>Supuesto</label>
+        <select id="excTrack">
+          <option value="conv">Convenio</option>
+          <option value="lj">4 días L-J</option>
+          <option value="mv">4 días M-V</option>
+        </select>
+      </div>
+      <div>
+        <label>Unidad</label>
+        <select id="excMode">
+          <option value="hours">Horas</option>
+          <option value="days">Jornadas completas</option>
+        </select>
+      </div>
+      <div>
+        <label id="excAmountLabel">Cantidad (horas)</label>
+        <input id="excAmount" type="number" min="0.25" step="0.25" placeholder="p. ej. 3.5">
+      </div>
+    </div>
+    <div class="row2" style="margin-top:8px">
+      <div>
+        <label>Fecha (opcional, para marcarlo en el calendario)</label>
+        <input id="excDate" type="date">
+      </div>
+      <div style="align-self:end">
+        <button id="addExcessUse">Registrar disfrute</button>
+      </div>
+    </div>
+    <p class="hint" id="excFeedback"></p>
+  </div>
+
+  <div id="excessList" class="entries"></div>
+</div>
 </section>
 </div>
 </main>
@@ -159,6 +225,7 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 const $ = id => document.getElementById(id);
 const TARGET = 1505;
 const CREDIT = 42;
+const EXCESS_BANK_HOURS = 14; // Art. 11.1: bolsa fija de 14 h/año, igual en los 3 supuestos
 const TRACKS = ['conv','lj','mv'];
 
 const TRACK_DEF = {
@@ -174,13 +241,11 @@ const STATUS_COLOR = { off:'#eef2f7', holiday:'#fecaca', vacation:'#fde68a', per
 const state = {
   holidays:{}, absences:[],
   vacStarts:{conv:null,lj:null,mv:null},
-  excStarts:{lj:null,mv:null},
   antiguedad:{conv:0,lj:0,mv:0},
-  show:{conv:true,lj:true,mv:true}
+  show:{conv:true,lj:true,mv:true},
+  excessBank:{ conv:{uses:[]}, lj:{uses:[]}, mv:{uses:[]} }
 };
 let vacCache = {conv:[],lj:[],mv:[]};
-let excCache = {lj:[],mv:[]};
-let excCountCache = {lj:0,mv:0};
 
 const pad = n => String(n).padStart(2,'0');
 const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -239,13 +304,6 @@ function vacDays(start, trackKey){
   }
   return out;
 }
-function roundExcessToDays(hoursExcess, dailyHours){
-  if(hoursExcess<=0) return 0;
-  let d = Math.floor(hoursExcess/dailyHours);
-  let rem = hoursExcess - d*dailyHours;
-  if(rem > dailyHours/2) d += 1;
-  return d;
-}
 function grossHours(trackKey){
   let total=0;
   for(let m=0;m<12;m++){
@@ -257,31 +315,65 @@ function grossHours(trackKey){
   }
   return total;
 }
-function excesoDaysCount(trackKey){
-  if(trackKey==='conv') return 0;
-  let diff = grossHours(trackKey) - grossHours('conv');
-  return roundExcessToDays(diff, TRACK_DEF[trackKey].dailyHours);
-}
-function excesoDays(start, trackKey, count){
-  if(!start || start.slice(0,4)!==String(year()) || count<=0) return [];
-  let d=dateOf(start), out=[], guard=0;
-  while(out.length<count && guard<400){
-    guard++;
-    let ds=iso(d);
-    if(scheduled(trackKey,d) && !holiday(d) && !vacCache[trackKey].includes(ds)) out.push(ds);
-    d.setDate(d.getDate()+1);
-  }
-  return out;
-}
 function recomputeCaches(){
   TRACKS.forEach(t=> vacCache[t] = vacDays(state.vacStarts[t], t));
-  ['lj','mv'].forEach(t=>{
-    excCountCache[t] = excesoDaysCount(t);
-    excCache[t] = excesoDays(state.excStarts[t], t, excCountCache[t]);
-  });
 }
 function absenceFor(ds, trackKey){ return state.absences.find(a=>a.date===ds && a.tracks.includes(trackKey)); }
 function permitUsed(trackKey){ return state.absences.filter(a=>a.type==='perm' && a.tracks.includes(trackKey)).reduce((x,a)=>x+(a.hours||0),0); }
+
+/* --- Lógica de la bolsa de compensación por exceso de jornada (Art. 11.1) --- */
+function excessEquivalentDays(dailyHours){
+  const value = EXCESS_BANK_HOURS / dailyHours;
+  const intPart = Math.floor(value);
+  const frac = value - intPart;
+  // Misma regla de redondeo del Convenio: fracción > 0,5 jornada -> redondeo al alza
+  if(frac > 0.5){
+    return { value, fullDays: intPart + 1, remainderHours: 0 };
+  }
+  return { value, fullDays: intPart, remainderHours: +(frac * dailyHours).toFixed(2) };
+}
+function excessUsedHours(trackKey){
+  return state.excessBank[trackKey].uses.reduce((sum,u)=>sum+u.hours,0);
+}
+function excessBalance(trackKey){
+  return +(EXCESS_BANK_HOURS - excessUsedHours(trackKey)).toFixed(2);
+}
+function excessUseFor(ds, trackKey){
+  return state.excessBank[trackKey].uses.find(u=>u.date===ds);
+}
+function addExcessUse(){
+  const track = $('excTrack').value;
+  const mode = $('excMode').value;
+  const amountRaw = $('excAmount').value;
+  const date = $('excDate').value;
+  const amount = Number(amountRaw);
+
+  if(!amountRaw || isNaN(amount) || amount<=0){
+    return setExcFeedback('Introduce una cantidad numérica mayor que 0.', true);
+  }
+  if(date && date.slice(0,4)!==String(year())){
+    return setExcFeedback('La fecha debe pertenecer al año seleccionado.', true);
+  }
+  const dailyHours = TRACK_DEF[track].dailyHours;
+  const hoursToUse = mode==='days' ? +(amount*dailyHours).toFixed(2) : +amount.toFixed(2);
+  const balance = excessBalance(track);
+  if(hoursToUse > balance + 1e-9){
+    return setExcFeedback(`Saldo insuficiente en ${TRACK_DEF[track].label}: disponible ${balance} h, solicitado ${hoursToUse} h.`, true);
+  }
+  state.excessBank[track].uses.push({ date: date || null, hours: hoursToUse, mode, amount });
+  $('excAmount').value=''; $('excDate').value='';
+  setExcFeedback(`Registrado: ${hoursToUse} h de disfrute en ${TRACK_DEF[track].label}. Saldo restante: ${excessBalance(track)} h.`, false);
+  render();
+}
+function setExcFeedback(msg, isError){
+  const el = $('excFeedback');
+  el.textContent = msg;
+  el.style.color = isError ? '#b91c1c' : 'var(--muted)';
+}
+function removeExcessUse(track, idx){
+  state.excessBank[track].uses.splice(idx,1);
+  render();
+}
 
 function statusFor(trackKey,d,ds){
   if(!scheduled(trackKey,d)) return 'off';
@@ -289,7 +381,7 @@ function statusFor(trackKey,d,ds){
   if(vacCache[trackKey].includes(ds)) return 'vacation';
   let ab = absenceFor(ds,trackKey);
   if(ab){ return ab.type==='vac' ? 'vacation' : 'permiso'; }
-  if(trackKey!=='conv' && excCache[trackKey].includes(ds)) return 'exceso';
+  if(excessUseFor(ds,trackKey)) return 'exceso';
   return reduced(d) ? 'work-reduced' : 'work';
 }
 function colorFor(trackKey,st){
@@ -304,7 +396,7 @@ function labelFor(trackKey,st,d,ds){
   if(st==='holiday') return `${name}: Festivo (${state.holidays[ds]||'Festivo'})`;
   if(st==='vacation') return `${name}: Vacaciones`;
   if(st==='permiso'){ let a=absenceFor(ds,trackKey); return `${name}: Permiso (${a?a.hours:'?'} h)`; }
-  if(st==='exceso') return `${name}: Día de exceso de jornada`;
+  if(st==='exceso'){ let u=excessUseFor(ds,trackKey); return `${name}: Bolsa exceso de jornada (${u.hours} h)`; }
   if(st==='work-reduced') return `${name}: Jornada reducida (${hours(trackKey,d)} h)`;
   return `${name}: Jornada (${hours(trackKey,d)} h)`;
 }
@@ -322,19 +414,17 @@ function init(){
   state.holidays[year()+'-05-15'] = 'San Isidro';
   state.absences = [];
   state.vacStarts = {conv:null,lj:null,mv:null};
-  state.excStarts = {lj:null,mv:null};
-  ['vacStartConv','vacStartLj','vacStartMv','excStartLj','excStartMv'].forEach(id=>$(id).value='');
+  state.excessBank = { conv:{uses:[]}, lj:{uses:[]}, mv:{uses:[]} };
+  ['vacStartConv','vacStartLj','vacStartMv'].forEach(id=>$(id).value='');
   notice();
   render();
 }
 
 function applyDates(){
   let vc=$('vacStartConv').value, vl=$('vacStartLj').value, vm=$('vacStartMv').value;
-  let el=$('excStartLj').value, em=$('excStartMv').value;
-  let all=[vc,vl,vm,el,em].filter(Boolean);
+  let all=[vc,vl,vm].filter(Boolean);
   if(all.some(x=>x.slice(0,4)!==String(year()))) return alert('Las fechas deben pertenecer al año seleccionado.');
   state.vacStarts.conv=vc||null; state.vacStarts.lj=vl||null; state.vacStarts.mv=vm||null;
-  state.excStarts.lj=el||null; state.excStarts.mv=em||null;
   render();
 }
 
@@ -370,25 +460,51 @@ function lists(){
   $('absenceList').innerHTML = state.absences.map((a,i)=>
     `<div class="entry">${fmt(a.date)} — ${a.type==='perm'?'Permiso':'Vacaciones'} (${a.tracks.join('+')}${a.type==='perm'?', '+a.hours+' h':''}) <button data-a="${i}">Quitar</button></div>`
   ).join('');
-  $('excesoInfo').innerHTML = ['lj','mv'].map(t=>{
-    let applied = excCache[t].length, total = excCountCache[t];
-    return `<div class="entry">${TRACK_DEF[t].label}: ${total} día(s) de exceso calculados · ${applied} aplicado(s)${state.excStarts[t]?' desde '+fmt(state.excStarts[t]):''}</div>`;
-  }).join('');
   document.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ delete state.holidays[b.dataset.h]; render(); });
   document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ state.absences.splice(b.dataset.a,1); render(); });
+
+  $('excessList').innerHTML = TRACKS.map(t=>
+    state.excessBank[t].uses.map((u,i)=>
+      `<div class="entry">${TRACK_DEF[t].label} — ${u.date?fmt(u.date):'sin fecha'}: ${u.hours} h (${u.mode==='days'?u.amount+' jornada(s)':u.amount+' h directas'}) <button data-e="${t}|${i}">Quitar</button></div>`
+    ).join('')
+  ).join('');
+  document.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{
+    const [t,i] = b.dataset.e.split('|');
+    removeExcessUse(t, Number(i));
+  });
 }
 
 function infoPanels(){
   $('infoPanels').innerHTML = TRACKS.map(t=>{
     let d = TRACK_DEF[t];
-    let excLine = t==='conv' ? '' : `Exceso de jornada: <b style="font-weight:700">${excCountCache[t]} día(s)</b> calculados para aproximar horas al Convenio (aplicados: ${excCache[t].length})<br>`;
     return `<div class="info-box">
       <b><span class="tag" style="background:${d.colorWork}"></span>${d.label}</b>
       Jornada: ${d.dailyHours} h/día (35 h/sem, ${TARGET} h/año teóricas)<br>
       Horas brutas calendario ${year()}: ${grossHours(t).toFixed(2)} h<br>
       Vacaciones: ${vacationDaysTotal(t)} días hábiles (base ${d.vacBase}${state.antiguedad[t]>0?' + antigüedad':''})<br>
-      Asuntos particulares: ${d.asuntosParticulares} días/año · Libre disposición: ${d.libreDisp} h/año<br>
-      ${excLine}
+      Asuntos particulares: ${d.asuntosParticulares} días/año · Libre disposición (5%): ${d.libreDisp} h/año<br>
+      Bolsa exceso jornada (Art. 11.1): ${EXCESS_BANK_HOURS} h/año · saldo ${excessBalance(t)} h
+    </div>`;
+  }).join('');
+}
+
+function excessCards(){
+  $('excessCards').innerHTML = TRACKS.map(t=>{
+    const d = TRACK_DEF[t];
+    const eq = excessEquivalentDays(d.dailyHours);
+    const balance = excessBalance(t);
+    const used = excessUsedHours(t);
+    const pct = Math.max(0, Math.min(100, (used/EXCESS_BANK_HOURS)*100));
+    const remainderTxt = eq.remainderHours>0 ? ` + ${eq.remainderHours} h restantes` : '';
+    return `<div class="excess-card">
+      <h4><span class="tag" style="background:${d.colorWork}"></span>${d.label}</h4>
+      <div class="balance">${balance} h <small>saldo disponible de ${EXCESS_BANK_HOURS} h/año</small></div>
+      <div class="excess-bar"><span style="width:${pct}%"></span></div>
+      <div class="equiv">
+        14 h ÷ ${d.dailyHours} h/día = <strong>${eq.value.toFixed(2)} jornadas</strong><br>
+        Equivalencia redondeada: <strong>${eq.fullDays} jornada(s) completa(s)</strong>${remainderTxt}
+      </div>
+      <div class="hint">Usadas hasta ahora: ${used.toFixed(2)} h de ${EXCESS_BANK_HOURS} h.</div>
     </div>`;
   }).join('');
 }
@@ -406,7 +522,7 @@ function summary(){
         else if(st==='work-reduced') res[t].h += hours(t,d);
         else if(st==='permiso'){ let a=absenceFor(ds,t); res[t].p += a.hours; res[t].h += Math.max(0, hours(t,d)-a.hours); }
         else if(st==='vacation') res[t].v += hours(t,d);
-        else if(st==='exceso') res[t].e += hours(t,d);
+        else if(st==='exceso'){ let u=excessUseFor(ds,t); res[t].e += u.hours; }
       });
     }
   }
@@ -416,10 +532,10 @@ function summary(){
     <div class="metric"><strong>${res.conv.h.toFixed(2)} h</strong><span>Horas trabajadas Convenio</span></div>
     <div class="metric"><strong>${res.lj.h.toFixed(2)} h</strong><span>Horas trabajadas L-J</span></div>
     <div class="metric"><strong>${res.mv.h.toFixed(2)} h</strong><span>Horas trabajadas M-V</span></div>
-    <div class="metric warn"><strong>${diffLj} / ${diffMv} h</strong><span>Diferencia L-J / M-V vs. Convenio (tras exceso)</span></div>
+    <div class="metric warn"><strong>${diffLj} / ${diffMv} h</strong><span>Diferencia L-J / M-V vs. Convenio</span></div>
     <div class="metric"><strong>${res.conv.p.toFixed(2)} / ${res.lj.p.toFixed(2)} / ${res.mv.p.toFixed(2)} h</strong><span>Permisos (máx. ${CREDIT} c/u)</span></div>
     <div class="metric"><strong>${res.conv.v.toFixed(2)} / ${res.lj.v.toFixed(2)} / ${res.mv.v.toFixed(2)} h</strong><span>Vacaciones (Conv/L-J/M-V)</span></div>
-    <div class="metric"><strong>${res.lj.e.toFixed(2)} / ${res.mv.e.toFixed(2)} h</strong><span>Horas de exceso aplicadas (L-J/M-V)</span></div>
+    <div class="metric"><strong>${res.conv.e.toFixed(2)} / ${res.lj.e.toFixed(2)} / ${res.mv.e.toFixed(2)} h</strong><span>Bolsa exceso disfrutada (Conv/L-J/M-V)</span></div>
   `;
 }
 
@@ -432,7 +548,7 @@ function legend(){
     <span><i class="dot" style="background:#fecaca"></i> Festivo</span>
     <span><i class="dot" style="background:#fde68a"></i> Vacaciones</span>
     <span><i class="dot" style="background:#e9d5ff"></i> Permiso</span>
-    <span><i class="dot" style="background:#99f6e4"></i> Exceso de jornada</span>
+    <span><i class="dot" style="background:#99f6e4"></i> Bolsa exceso de jornada</span>
   `;
 }
 
@@ -468,9 +584,10 @@ function calendar(){
 }
 
 function saveData(){
-  let data = {format:'organizacion-laboral', version:3, year:year(),
+  let data = {format:'organizacion-laboral', version:4, year:year(),
     holidays:state.holidays, absences:state.absences,
-    vacStarts:state.vacStarts, excStarts:state.excStarts, antiguedad:state.antiguedad, show:state.show};
+    vacStarts:state.vacStarts, antiguedad:state.antiguedad, show:state.show,
+    excessBank:state.excessBank};
   let blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   let url = URL.createObjectURL(blob);
   let a = document.createElement('a');
@@ -489,13 +606,12 @@ function loadData(){
       if(!d || !d.holidays || !Array.isArray(d.absences)) throw 0;
       $('year').value = d.year || year();
       state.holidays = d.holidays; state.holidays[year()+'-05-15']='San Isidro';
-      state.absences = d.absences.map(a=> a.tracks ? a : {...a, tracks:[a.group==='both'?'conv':'conv']} );
+      state.absences = d.absences.map(a=> a.tracks ? a : {...a, tracks:['conv']} );
       state.vacStarts = d.vacStarts || {conv:null,lj:null,mv:null};
-      state.excStarts = d.excStarts || {lj:null,mv:null};
       state.antiguedad = d.antiguedad || {conv:0,lj:0,mv:0};
       state.show = d.show || {conv:true,lj:true,mv:true};
+      state.excessBank = d.excessBank || { conv:{uses:[]}, lj:{uses:[]}, mv:{uses:[]} };
       $('vacStartConv').value=state.vacStarts.conv||''; $('vacStartLj').value=state.vacStarts.lj||''; $('vacStartMv').value=state.vacStarts.mv||'';
-      $('excStartLj').value=state.excStarts.lj||''; $('excStartMv').value=state.excStarts.mv||'';
       $('antConv').value=state.antiguedad.conv||0; $('antLj').value=state.antiguedad.lj||0; $('antMv').value=state.antiguedad.mv||0;
       $('showConv').checked=state.show.conv!==false; $('showLj').checked=state.show.lj!==false; $('showMv').checked=state.show.mv!==false;
       notice(); render();
@@ -511,7 +627,7 @@ function render(){
   state.antiguedad.mv=Number($('antMv').value)||0;
   state.show.conv=$('showConv').checked; state.show.lj=$('showLj').checked; state.show.mv=$('showMv').checked;
   recomputeCaches();
-  lists(); infoPanels(); summary(); legend(); calendar();
+  lists(); infoPanels(); excessCards(); summary(); legend(); calendar();
 }
 
 $('year').onchange = init;
@@ -522,7 +638,9 @@ $('addAbsence').onclick = addAbsence;
 $('saveData').onclick = saveData;
 $('loadData').onclick = loadData;
 $('print').onclick = () => print();
-$('clearAll').onclick = () => { if(confirm('¿Eliminar festivos añadidos, vacaciones, exceso y permisos?')) init(); };
+$('clearAll').onclick = () => { if(confirm('¿Eliminar festivos añadidos, vacaciones, permisos y disfrute de la bolsa de exceso?')) init(); };
+$('addExcessUse').onclick = addExcessUse;
+$('excMode').onchange = () => { $('excAmountLabel').textContent = $('excMode').value==='days' ? 'Cantidad (jornadas completas)' : 'Cantidad (horas)'; };
 
 init();
 </script>
