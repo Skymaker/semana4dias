@@ -57,6 +57,9 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 .tri{position:absolute;left:0;top:34%;width:100%;height:66%}
 .tri.lj{clip-path:polygon(0 0,100% 0,0 100%)}
 .tri.mv{clip-path:polygon(100% 0,100% 100%,0 100%)}
+/* Festivo: colorea el cuadrado completo, sin reparto por supuesto */
+.day.holiday-full{background:#fecaca !important;box-shadow:inset 0 0 0 2px #dc2626}
+.holiday-label{position:absolute;bottom:3px;left:2px;right:2px;text-align:center;font-size:.66rem;font-weight:800;color:#991b1b;letter-spacing:.3px;z-index:4}
 .day[data-tip]:hover::after{content:attr(data-tip);position:absolute;z-index:20;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);width:max-content;max-width:230px;padding:7px 9px;border-radius:6px;background:#111827;color:#fff;font-size:.72rem;line-height:1.35;white-space:normal;box-shadow:0 4px 12px rgba(0,0,0,.4);pointer-events:none}
 .day[data-tip]:hover::before{content:"";position:absolute;z-index:21;left:50%;bottom:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111827;pointer-events:none}
 /* --- Módulo de compensación por exceso de jornada (Art. 11.1) --- */
@@ -80,7 +83,7 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 <body>
 <header>
 <h1>Simulador comparativo: Convenio vs. semana de 4 días (L-J y M-V)</h1>
-<p>Las tres opciones se muestran a la vez en cada día: Convenio ocupa el tercio superior; L-J y M-V se reparten en diagonal los dos tercios inferiores.</p>
+<p>Las tres opciones se muestran a la vez en cada día: Convenio ocupa el tercio superior; L-J y M-V se reparten en diagonal los dos tercios inferiores. Los festivos colorean el día completo.</p>
 </header>
 <main>
 <div class="layout">
@@ -124,7 +127,7 @@ button{cursor:pointer;background:#eff6ff;color:#1d4ed8;font-weight:700}
 </div>
 
 <h3>Festivos</h3>
-<p class="hint">En 2026 se cargan los festivos de Madrid. El 15 de mayo (San Isidro) es automático y no editable.</p>
+<p class="hint">En 2026 se cargan los festivos de Madrid. El 15 de mayo (San Isidro) es automático y no editable. Cada festivo colorea el día completo en el calendario y muestra su nombre íntegro al pasar el cursor.</p>
 <input id="holidayDate" type="date">
 <input id="holidayName" placeholder="Nombre del festivo">
 <button id="addHoliday">Añadir festivo</button>
@@ -236,7 +239,7 @@ const TRACK_DEF = {
   mv:{ label:'4 días (M-V)', dailyHours:8.75, workDays:[2,3,4,5], vacBase:18, asuntosParticulares:5,
     antiguedad:{15:1,20:2,25:2,30:3}, libreDisp:75.25, colorWork:'#ddd6fe', colorReduced:'#c4b5fd' }
 };
-const STATUS_COLOR = { off:'#eef2f7', holiday:'#fecaca', vacation:'#fde68a', permiso:'#e9d5ff', exceso:'#99f6e4' };
+const STATUS_COLOR = { off:'#eef2f7', vacation:'#fde68a', permiso:'#e9d5ff', exceso:'#99f6e4' };
 
 const state = {
   holidays:{}, absences:[],
@@ -254,6 +257,7 @@ const fmt = s => dateOf(s).toLocaleDateString('es-ES',{day:'2-digit',month:'2-di
 function mon(d){ let x=new Date(d); let w=x.getDay()||7; x.setDate(x.getDate()-w+1); return x; }
 const months = 'enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre'.split(',');
 const wd = ['L','M','X','J','V','S','D'];
+const short = t => t.trim().slice(0,3).toUpperCase();
 
 const defaults2026 = {
   '2026-01-01':'Año Nuevo','2026-01-06':'Epifanía del Señor','2026-04-02':'Jueves Santo',
@@ -393,7 +397,6 @@ function colorFor(trackKey,st){
 function labelFor(trackKey,st,d,ds){
   let name = TRACK_DEF[trackKey].label;
   if(st==='off') return null;
-  if(st==='holiday') return `${name}: Festivo (${state.holidays[ds]||'Festivo'})`;
   if(st==='vacation') return `${name}: Vacaciones`;
   if(st==='permiso'){ let a=absenceFor(ds,trackKey); return `${name}: Permiso (${a?a.hours:'?'} h)`; }
   if(st==='exceso'){ let u=excessUseFor(ds,trackKey); return `${name}: Bolsa exceso de jornada (${u.hours} h)`; }
@@ -545,7 +548,7 @@ function legend(){
     <span><i class="dot" style="background:#bbf7d0"></i> L-J (diagonal)</span>
     <span><i class="dot" style="background:#ddd6fe"></i> M-V (diagonal)</span>
     <span><i class="dot" style="background:#7dd3fc"></i> Jornada reducida (tono más intenso: San Isidro / verano)</span>
-    <span><i class="dot" style="background:#fecaca"></i> Festivo</span>
+    <span><i class="dot" style="background:#fecaca;box-shadow:inset 0 0 0 2px #dc2626"></i> Festivo (día completo)</span>
     <span><i class="dot" style="background:#fde68a"></i> Vacaciones</span>
     <span><i class="dot" style="background:#e9d5ff"></i> Permiso</span>
     <span><i class="dot" style="background:#99f6e4"></i> Bolsa exceso de jornada</span>
@@ -564,6 +567,18 @@ function calendar(){
     for(let i=0;i<first;i++) days.insertAdjacentHTML('beforeend','<div class="day empty"></div>');
     for(let n=1;n<=new Date(y,m+1,0).getDate();n++){
       let d=new Date(y,m,n), ds=iso(d);
+
+      // Festivo: colorea el cuadrado completo y muestra el nombre íntegro en el tooltip
+      if(holiday(d)){
+        let fullName = state.holidays[ds] || 'Festivo';
+        days.insertAdjacentHTML('beforeend',
+          `<div class="day holiday-full" data-tip="${esc(fullName)}">
+             <span class="daynum">${n}</span>
+             <div class="holiday-label">${esc(short(fullName))}</div>
+           </div>`);
+        continue;
+      }
+
       let tips=[];
       let stConv = statusFor('conv',d,ds), stLj = statusFor('lj',d,ds), stMv = statusFor('mv',d,ds);
       [['conv',stConv],['lj',stLj],['mv',stMv]].forEach(([t,st])=>{
